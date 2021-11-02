@@ -40,70 +40,20 @@ def main():
         id_num = email['id']
         message = service.users().messages().get(userId='me', id=id_num).execute()
         content = message['payload']
-        # print(content)
         if('body' in content and 'data' in content['body']): 
             data = base64.urlsafe_b64decode(content['body']['data'])
             data = data.decode('utf-8')
-            print(data) 
-            print("\n\nMine type2\n\n" )     
+            print(data)     
         if ('parts' in content):
-            print("\n\nMine containertype1\n\n" )
+            combined_data=""
             for part in content['parts']:
                 if('data' in part['body']):
                     data2 = base64.urlsafe_b64decode(part['body']['data'])
                     data2 = data2.decode('utf-8')
-                    print(data2)
-                    print("\n\nMine containertype2\n\n" )
+                    combined_data = combined_data + data2
+        print(re.findall(r'[0-9]{4,8}', combined_data)[0])
         
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    # messages = service.users().messages().get(userId='me', id='17ce105fd69701bf').execute()
-    # results = service.users().labels().list(userId='me').execute()
-    # labels = results.get('labels', [])
-    # print(email_list)
-
-    #labelIds=['INBOX', 'CATEGORY_PERSONAL','IMPORTANT','SPAM','STARRED']
-    # if not labels:
-    #     print('No labels found.')
-    # else:
-    #     # if 'messages' in messages:
-    #     #     print('Messages:')
-    #     #     for message in messages['messages']:
-    #     #         print(message)
-        
-    #     print('Labels:')
-    #     for label in labels:
-    #         print(label['name'])
-
-
-# data = content['body']['data']
-#                 data = base64.urlsafe_b64decode(data)
-#                 data = data.decode('utf-8')
-#                 print(data)
-#                 if(re.search('OTP', data)):
-#                     print('OTP found')
-#                     print(data)
-#                     print(id_num)
-#                     service.users().messages().modify(userId='me', id=id_num, body={'removeLabelIds': ['UNREAD']}).execute()
